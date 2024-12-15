@@ -4,9 +4,12 @@ const DropDownMenu = () => {
     const {user,logOut} = useAuth();
     const userImage = user?.photoURL || userLogo;
     
-    const handleLogout = () => {
-        logOut();
-        console.log("click");
+    const handleLogout = async() => {
+       try{
+        await logOut();
+       }
+       catch(err){console.log(err.message)}
+        
     }
     return(
 <ul className="menu menu-horizontal px-1">

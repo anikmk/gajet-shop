@@ -1,5 +1,6 @@
 import { Link, useNavigate, } from "react-router"
 import useAuth from "../(hook)/useAuth"
+import GoogleSignUp from "../sharecomponnents/(GoogleSignUP)/GoogleSignUp";
 
 
 export const Register = () => {
@@ -10,7 +11,7 @@ export const Register = () => {
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        
+        const role = form.role.value;
         try{
             await signinUser(email,password)
             navigate('/')
@@ -34,12 +35,18 @@ export const Register = () => {
           </label>
           <input name="password" type="password" placeholder="password" className="input input-bordered" required />
         </div>
+        <select name="role" className="select select-bordered w-full max-w-xs">
+        <option disabled selected>Role</option>
+        <option value={'buyer'}>Buyer</option>
+        <option value={'seller'}>Seller</option>
+        </select>
         <div className="form-control mt-6">
           <button className="btn btn-primary">Register</button>
         </div>
         <div>
             have an account? <Link to={'/login'}>Login</Link>
         </div>
+        <GoogleSignUp />
       </form>
     </div>
   </div>
