@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router"
 import GoogleSignUp from "../sharecomponnents/(GoogleSignUP)/GoogleSignUp"
 import useAuth from "../(hook)/useAuth"
 
-
 export const LogIn = () => {
   const {loginUser} = useAuth();
   const navigate = useNavigate();

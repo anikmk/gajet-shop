@@ -9,11 +9,13 @@ import {
     signOut, } from "firebase/auth";
 
 import { app } from "../../firebase-config/firebase";
+import useAxios from "../(hook)/useAxios";
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
 
 const AuthProvider = ({children}) => {
+    const axiosInstance = useAxios();
     const [user,setUser] = useState(null);
     const [loading,setLoading] = useState(true);
     const google = new GoogleAuthProvider();
@@ -39,7 +41,17 @@ const AuthProvider = ({children}) => {
     useEffect(() => {
       const unSubscrive = onAuthStateChanged(auth,(currentUser) => {
         setUser(currentUser || null); // Ensure null when logged out
-        setLoading(false);
+        if(currentUser){
+          axiosInstance.post('/jsonwebtoken',{email:currentUser.email})
+         .then((data) => {
+          localStorage.setItem("access_token",data?.data?.token);
+          setLoading(false)
+         })
+        }
+        else{
+          localStorage.removeItem("access_token")
+          setLoading(false)
+        }
 
       })
     

@@ -1,15 +1,14 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require("cors");
+var jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;;
 
 app.use(cors());
 app.use(express.json());
-app.get('/', (req, res) => {
-  res.send('GAJETSHOP SERVER IS READY')
-})
+
 
 const uri = `mongodb+srv://${process.env.db_user}:${process.env.db_pass}@anik.34iapyi.mongodb.net/?retryWrites=true&w=majority&appName=Anik`;
 
@@ -28,7 +27,7 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log(" connected to MongoDB!");
   } 
   catch(error) {
     console.log(error)
@@ -37,7 +36,23 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.get('/', (req, res) => {
+  res.send('GAJETSHOP SERVER IS READY')
+})
 
+// Genarate jwt token 
+app.post('/jsonwebtoken',async(req,res) => {
+  try{
+    const userEmail = req.body;
+    if(userEmail){
+     const token = jwt.sign({userEmail},process.env.SECRET_TOKEN_KEY,{expiresIn:"5h"});
+      res.send({token})
+    }
+  }
+  catch(err){
+    res.send({error:err})
+  }
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
