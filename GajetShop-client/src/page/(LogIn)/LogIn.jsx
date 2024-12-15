@@ -1,4 +1,5 @@
 import { Link } from "react-router"
+import GoogleSignUp from "../sharecomponnents/(GoogleSignUP)/GoogleSignUp"
 
 
 export const LogIn = () => {
@@ -24,6 +25,7 @@ export const LogIn = () => {
         <div>
             new to here? <Link to={'/register'}>Register</Link>
         </div>
+        <GoogleSignUp />
       </form>
     </div>
   </div>

@@ -1,12 +1,11 @@
 import { Link } from "react-router"
 import useAuth from "../(hook)/useAuth"
+import DropDownMenu from "./(DropDownMenu)/DropDownMenu";
 
 
 function Navbar() {
-  const {user,logOut} = useAuth();
-  const handleLogOut = () => {
-    logOut();
-  }
+  const {user,} = useAuth();
+
   return (
     <div className="navbar bg-base-200">
   <div className="navbar-start ">
@@ -58,7 +57,7 @@ function Navbar() {
   </div>
   <div className="navbar-end">
     {
-      user? <Link to={'/register'}><button onClick={handleLogOut}>Logout</button></Link> : <Link to={'/register'}><button>Login</button></Link>
+      user? <DropDownMenu /> : <Link to={'/register'}><button>Login</button></Link>
     }
   </div>
 </div>
