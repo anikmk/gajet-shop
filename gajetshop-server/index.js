@@ -6,7 +6,12 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;;
 
-app.use(cors());
+app.use(cors(
+  {
+    origin:"http://localhost:5173",
+    optionsSuccessStatus:200
+  }
+));
 app.use(express.json());
 
 
@@ -72,6 +77,17 @@ app.post('/users',async(req,res) => {
   catch(err){res.send({error:"internal server error"})}
 })
 
+app.get("/seller/product/:email", async(req,res) => {
+  try{
+    const email = req.params.email;
+    const result = await userCollection.find({email:email});
+    if(result){
+
+     return res.send(result);
+    }
+  }
+  catch(err){res.send({message:"user not found"})}
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

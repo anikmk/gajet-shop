@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import useAuth from '../../(hook)/useAuth';
 import userLogo from '../../../../public/user.png'
 const DropDownMenu = () => {
@@ -17,7 +18,7 @@ const DropDownMenu = () => {
         <details>
           <summary><img className='w-10' src={userImage} alt="" /></summary>
           <ul className="p-2">
-            <li><a>Dashboard</a></li>
+            <li><Link to={"/dashboard/overview"}>Dashboard</Link></li>
             <li><a onClick={handleLogout}>Log Out</a></li>
           </ul>
         </details>

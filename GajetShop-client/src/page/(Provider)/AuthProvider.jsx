@@ -40,6 +40,7 @@ const AuthProvider = ({children}) => {
 
     useEffect(() => {
       const unSubscrive = onAuthStateChanged(auth,(currentUser) => {
+        console.log(currentUser);
         setUser(currentUser || null); // Ensure null when logged out
         if(currentUser){
           axiosInstance.post('/jsonwebtoken',{email:currentUser.email})
