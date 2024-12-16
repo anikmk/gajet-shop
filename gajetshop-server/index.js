@@ -21,6 +21,8 @@ const client = new MongoClient(uri, {
   }
 });
 
+const userCollection = client.db("gajetShop").collection("users");
+const productCollection = client.db("gajetShop").collection("products");
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
@@ -53,6 +55,23 @@ app.post('/jsonwebtoken',async(req,res) => {
     res.send({error:err})
   }
 })
+// post request for single users
+app.post('/users',async(req,res) => {
+  try{
+    const usersData = req.body;
+    const query = {email:usersData.email};
+    const existingUser = await userCollection.findOne(query);
+    if(existingUser){
+      return res.send({message:"user already store in db"})
+    }
+    else{
+      const result = await userCollection.insertOne(usersData);
+      res.send(result);
+    }
+  }
+  catch(err){res.send({error:"internal server error"})}
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

@@ -1,9 +1,11 @@
 import { Link, useNavigate, } from "react-router"
 import useAuth from "../(hook)/useAuth"
 import GoogleSignUp from "../sharecomponnents/(GoogleSignUP)/GoogleSignUp";
+import useAxios from "../(hook)/useAxios";
 
 
 export const Register = () => {
+  const axiosInstance = useAxios();
     const {signinUser} = useAuth();
     const navigate = useNavigate();
     const handleSignIn = async(e) => {
@@ -12,9 +14,20 @@ export const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
         const role = form.role.value;
+        const status = role === "buyer" ? "aproved" : "pending";
+        const wishlist = [];
+        const userData = {email,role,status,wishlist}
+
         try{
-            await signinUser(email,password)
-            navigate('/')
+            const user = await signinUser(email,password)
+            if(user){
+             const result =  await axiosInstance.post("/users",userData)
+             if(result?.data?.insertedId){
+              alert("Registration succesfull!");
+               navigate('/')
+            }
+            }
+           
         }
         catch(err){console.log(err);}
     }
