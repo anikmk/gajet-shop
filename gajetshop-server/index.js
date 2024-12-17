@@ -80,13 +80,16 @@ app.post('/users',async(req,res) => {
 app.get("/seller/product/:email", async(req,res) => {
   try{
     const email = req.params.email;
-    const result = await userCollection.find({email:email});
+    const result = await userCollection.findOne({email:email});
+    console.log(result);
     if(result){
 
      return res.send(result);
+    } else {
+      return res.status(404).send({ message: "User not found" });
     }
   }
-  catch(err){res.send({message:"user not found"})}
+  catch(err){res.send({message:"internal server error"})}
 })
 
 app.listen(port, () => {
