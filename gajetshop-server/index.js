@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;;
-
+// middleware start
 app.use(cors(
   {
     origin:"http://localhost:5173",
@@ -13,7 +13,33 @@ app.use(cors(
   }
 ));
 app.use(express.json());
+// jwt middleware
+const jwtVerify = (req,res,next) => {
+  const authorization = req.header.authorization;
+  if(!authorization){
+    return res.send({message:'no token'})
+  }
+  const token = authorization.split(' ')[1];
+  jwt.verify(token,process.env.SECRET_TOKEN_KEY,(err,decoded) => {
+    if(err){
+      return res.send({message:"invalid token"});
+    }
+    req.decoded = decoded;
+    next();
+  })
+}
 
+// seller middleware
+const sellerVerify = async(req,res,next) => {
+  const email = req.decoded.email;
+  const query = {email:email}
+  const user = await userCollection.findOne(query);
+  if (user?.role !== "seller") {
+    return res.send({message:"forbidden access"})
+  }
+  next();
+}
+// middleware end
 
 const uri = `mongodb+srv://${process.env.db_user}:${process.env.db_pass}@anik.34iapyi.mongodb.net/?retryWrites=true&w=majority&appName=Anik`;
 
@@ -77,11 +103,22 @@ app.post('/users',async(req,res) => {
   catch(err){res.send({error:"internal server error"})}
 })
 
+// for seller route
+// todo:add product for seller post route
+app.post("/seller/addproduct", jwtVerify,sellerVerify, async(req,res) => {
+  try{
+    const addProductData = req.body;
+    const result = await productCollection.insertOne(addProductData);
+    res.send(result); 
+  }
+  catch(err){res.send({message:"internal server error"})}
+})
+
+
 app.get("/seller/product/:email", async(req,res) => {
   try{
     const email = req.params.email;
     const result = await userCollection.findOne({email:email});
-    console.log(result);
     if(result){
 
      return res.send(result);

@@ -8,6 +8,7 @@ import PrivetRoute from "../page/(PrivetRoute)/PrivetRoute";
 import Overview from "../page/(DashboardComponnent)/Overview/Overview";
 import MyProduct from "../page/(DashboardComponnent)/MyProduct/MyProduct";
 import AddProduct from "../page/(DashboardComponnent)/AddProduct/AddProduct";
+import SellerRoute from "../page/(PrivetRoute)/SellerRoute";
 
 export const router = createBrowserRouter([
     {
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
             },
             {
                 path:"addProduct",
-                element:<AddProduct />
+                element:<SellerRoute><AddProduct /></SellerRoute>
             }
 
 
